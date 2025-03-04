@@ -28,6 +28,26 @@ docker compose build --no-cache
 docker compose up -d
 ```
 
+> [!IMPORTANT]
+> Si ejecuta por primera vez no olvide que tiene que inicializar prisma.
+
+### Inicializar Prisma para la base de datos:
+
+> [!IMPORTANT]
+> Te recomiendo el primero:
+
+1. Generar migraciones y sincroniza.
+
+```bash
+docker exec apiprueba-api_nest-1 pnpm prisma migrate dev --name init
+```
+
+2. Tambien puedes usar el siguinte para producción:
+
+```bash
+docker exec apiprueba-api_nest-1 pnpm prisma migrate deploy
+```
+
 ---
 
 ### Documentación
