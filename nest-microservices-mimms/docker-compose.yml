@@ -1,0 +1,59 @@
+services:
+  api_gateway:
+    build: ./http-api-gateway
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./http-api-gateway/src:/usr/src/app/src
+    command: pnpm run start:dev
+    environment:
+      - PORT=3000
+
+  postgres:
+    image: postgres:15
+    container_name: nest_postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: nestuser
+      POSTGRES_PASSWORD: nestpassword123
+      POSTGRES_DB: nestdb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nestuser -d nestdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  users_microservice:
+    build: ./users-microservice
+    depends_on:
+      - postgres
+    environment:
+      - DATABASE_URL=postgresql://nestuser:nestpassword123@postgres:5432/nestdb
+      - PORT=3001
+    volumes:
+      - ./users-microservice/src:/usr/src/app/src
+    command: pnpm run start:dev
+
+  orders_microservice:
+    build: ./orders-microservice
+    depends_on:
+      - postgres
+    environment:
+      - DATABASE_URL=postgresql://nestuser:nestpassword123@postgres:5432/nestdb
+      - PORT=3002
+    volumes:
+      - ./orders-microservice/src:/usr/src/app/src
+    command: pnpm run start:dev
+
+  nats:
+    image: nats:latest
+    restart: always
+    ports:
+      - "4222:4222"
+
+volumes:
+  postgres_data:
