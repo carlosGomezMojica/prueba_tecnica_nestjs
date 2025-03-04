@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: nest_postgres
+    restart: always
+    ports:
+      - '5432:5432'
+    environment: # <-- Corregido (antes estaba mal escrito como "enviroment")
+      POSTGRES_USER: nestuser
+      POSTGRES_PASSWORD: nestpassword123 # <-- Corregido (antes era "nestpasword123")
+      POSTGRES_DB: nestdb # <-- Corregido (antes era "PSOTGRES_DB")
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data: # <-- Corregido (antes era una string en vez de un mapeo)
+

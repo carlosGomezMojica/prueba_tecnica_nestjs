@@ -1,0 +1,36 @@
+services:
+  api_nest:
+    build: ./prueba_emimms
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./prueba_emimms/src:/usr/src/app/src
+    command: pnpm run start:dev
+    environment:
+      - PORT=3000
+      - DATABASE_URL=postgresql://nestuser:nestpassword123@prueba_emimmspostgres:5432/nestdb?schema=public
+      - SEED="semillaDeEncriptacionparaapiMiMMs"
+    depends_on:
+      prueba_emimmspostgres:
+        condition: service_healthy # Esperar hasta que PostgreSQL esté listo
+
+  prueba_emimmspostgres:
+    image: postgres:15
+    container_name: nest_postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: nestuser
+      POSTGRES_PASSWORD: nestpassword123
+      POSTGRES_DB: nestdb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nestuser -d nestdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
