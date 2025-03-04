@@ -19,13 +19,13 @@
 2. Construir los contenedores sin utilizar la caché:
 
 ```bash
-docker-compose build --no-cache
+docker compose build --no-cache
 ```
 
 3. Levantar los contenedores:
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 ---
@@ -47,13 +47,13 @@ docker-compose up -d
 2. Construir los contenedores sin utilizar la caché:
 
 ```bash
-docker-compose build --no-cache
+docker compose build --no-cache
 ```
 
 3. Levantar los contenedores:
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 ---
